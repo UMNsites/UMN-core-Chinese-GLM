@@ -1,17 +1,15 @@
 export const config = { maxDuration: 60 };
 
-// Cache the Q-A page content so we don't fetch it every request
-let qaContent = null;
-let qaFetchedAt = 0;
-const CACHE_MS = 5 * 60 * 1000;
+var qaContent = null;
+var qaFetchedAt = 0;
+var CACHE_MS = 5 * 60 * 1000;
 
 async function getQAContent() {
   if (qaContent && Date.now() - qaFetchedAt < CACHE_MS) return qaContent;
   try {
-    const res = await fetch('https://umnsites.github.io/Q-A/');
-    const html = await res.text();
-    // Strip HTML tags, decode entities, collapse whitespace
-    const text = html
+    var res = await fetch('https://umnsites.github.io/Q-A/');
+    var html = await res.text();
+    var text = html
       .replace(/<script[\s\S]*?<\/script>/gi, '')
       .replace(/<style[\s\S]*?<\/style>/gi, '')
       .replace(/<[^>]+>/g, ' ')
@@ -23,10 +21,10 @@ async function getQAContent() {
       .replace(/&nbsp;/g, ' ')
       .replace(/\s+/g, ' ')
       .trim();
-    qaContent = text.slice(0, 30000); // cap to stay within context limits
+    qaContent = text.slice(0, 30000);
     qaFetchedAt = Date.now();
   } catch (e) {
-    qaContent = '[Could not fetch Q-A page content]';
+    qaContent = '[Could not fetch Q-A page]';
   }
   return qaContent;
 }
@@ -34,21 +32,24 @@ async function getQAContent() {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  var apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
 
   try {
-    const { messages, model, temperature, max_tokens } = await req.body;
+    var body = await req.body;
+    var messages = body.messages || [];
+    var model = body.model || 'gemini-2.5-flash';
+    var temperature = body.temperature != null ? body.temperature : 0.7;
+    var max_tokens = body.max_tokens || 8192;
 
-    // Build Gemini format
-    const contents = [];
-    let systemInstruction = undefined;
+    var contents = [];
+    var systemInstruction = undefined;
 
-    // Inject Q-A knowledge base
-    const qaText = await getQAContent();
-    const knowledgeBase = `You are UMN Core, the official AI assistant for UMN. You have access to the following content from the UMN Q-A knowledge base page (https://umnsites.github.io/Q-A/). Use this information to answer questions accurately. If the user asks something not covered by this content, use your general knowledge but note that it may not be specific to UMN. Always be helpful, concise, and friendly.\n\n--- UMN Q-A KNOWLEDGE BASE ---\n${qaText}\n--- END KNOWLEDGE BASE ---`;
+    var qaText = await getQAContent();
+    var knowledgeBase = 'You are UMN Core, the official AI assistant for UMN. You have access to the following content from the UMN Q-A knowledge base page (https://umnsites.github.io/Q-A/). Use this information to answer questions accurately. If the user asks something not covered by this content, use your general knowledge but note that it may not be specific to UMN. Always be helpful, concise, and friendly.\n\n--- UMN Q-A KNOWLEDGE BASE ---\n' + qaText + '\n--- END KNOWLEDGE BASE ---';
 
-    for (const msg of messages) {
+    for (var i = 0; i < messages.length; i++) {
+      var msg = messages[i];
       if (msg.role === 'system') {
         systemInstruction = { parts: [{ text: knowledgeBase + '\n\n' + msg.content }] };
       } else {
@@ -59,30 +60,28 @@ export default async function handler(req, res) {
       }
     }
 
-    // If no system message was provided, still inject the knowledge base
     if (!systemInstruction) {
       systemInstruction = { parts: [{ text: knowledgeBase }] };
     }
 
-    const geminiModel = model || 'gemini-2.5-flash-preview-05-20';
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:streamGenerateContent?alt=sse&key=${apiKey}`;
+    var url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':streamGenerateContent?alt=sse&key=' + apiKey;
 
-    const response = await fetch(url, {
+    var response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents,
-        systemInstruction,
+        contents: contents,
+        systemInstruction: systemInstruction,
         generationConfig: {
-          temperature: temperature ?? 0.7,
-          maxOutputTokens: max_tokens ?? 8192,
+          temperature: temperature,
+          maxOutputTokens: max_tokens
         }
       })
     });
 
     if (!response.ok) {
-      let errMsg = `Gemini API returned ${response.status}`;
-      try { const e = await response.json(); errMsg = e.error?.message || errMsg; } catch (_) {}
+      var errMsg = 'Gemini API returned ' + response.status;
+      try { var errBody = await response.json(); errMsg = errBody.error && errBody.error.message ? errBody.error.message : errMsg; } catch (e) {}
       return res.status(response.status).json({ error: errMsg });
     }
 
@@ -91,39 +90,47 @@ export default async function handler(req, res) {
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders();
 
-    let previousText = '';
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
+    var previousText = '';
+    var reader = response.body.getReader();
+    var decoder = new TextDecoder();
+    var buffer = '';
 
     while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
+      var result = await reader.read();
+      if (result.done) break;
+      buffer += decoder.decode(result.value, { stream: true });
+      var lines = buffer.split('\n');
       buffer = lines.pop() || '';
-      for (const line of lines) {
-        const trimmed = line.trim();
+      for (var j = 0; j < lines.length; j++) {
+        var trimmed = lines[j].trim();
         if (!trimmed.startsWith('data: ')) continue;
-        const data = trimmed.slice(6);
+        var data = trimmed.slice(6);
         if (!data || data === '[DONE]') continue;
         try {
-          const json = JSON.parse(data);
-          const fullText = json.candidates?.[0]?.content?.parts?.[0]?.text;
-          const finish = json.candidates?.[0]?.finishReason;
+          var json = JSON.parse(data);
+          var fullText = json.candidates && json.candidates[0] && json.candidates[0].content && json.candidates[0].content.parts && json.candidates[0].content.parts[0] && json.candidates[0].content.parts[0].text;
+          var finish = json.candidates && json.candidates[0] && json.candidates[0].finishReason;
           if (fullText !== undefined) {
-            const delta = fullText.slice(previousText.length);
+            var delta = fullText.slice(previousText.length);
             previousText = fullText;
-            if (delta) res.write(`data: ${JSON.stringify({ choices: [{ delta: { content: delta }, index: 0 }] })}\n\n`);
+            if (delta) {
+              res.write('data: ' + JSON.stringify({ choices: [{ delta: { content: delta }, index: 0 }] }) + '\n\n');
+            }
           }
-          if (finish === 'STOP') res.write('data: [DONE]\n\n');
+          if (finish === 'STOP') {
+            res.write('data: [DONE]\n\n');
+          }
         } catch (e) {}
       }
     }
     res.write('data: [DONE]\n\n');
     res.end();
   } catch (err) {
-    if (!res.headersSent) res.status(500).json({ error: err.message });
-    else { res.write(`data: ${JSON.stringify({ error: err.message })}\n\n`); res.end(); }
+    if (!res.headersSent) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.write('data: ' + JSON.stringify({ error: err.message }) + '\n\n');
+      res.end();
+    }
   }
 }
