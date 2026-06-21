@@ -9,9 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script>
 tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},colors:{
-  melon:{50:'#fdf2f4',100:'#fce7eb',200:'#f9d0d9',300:'#f4a9ba',400:'#ed7a97',500:'#e04a73',600:'#cc2d5a',700:'#ab1f47',800:'#8f1b3d',900:'#7a1a38'},
-  rind:{50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b'},
-  surface:{50:'#030a06',100:'#071510',200:'#0c1f17',300:'#122a1f',400:'#183528'}
+melon:{50:'#fdf2f4',100:'#fce7eb',200:'#f9d0d9',300:'#f4a9ba',400:'#ed7a97',500:'#e04a73',600:'#cc2d5a',700:'#ab1f47',800:'#8f1b3d',900:'#7a1a38'},
+rind:{50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b'},
+surface:{50:'#030a06',100:'#071510',200:'#0c1f17',300:'#122a1f',400:'#183528'}
 }}}}
 </script>
 <style>
@@ -21,31 +21,24 @@ body{font-family:'Inter',sans-serif;background:#030a06;color:#fff;overflow:hidde
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(16,185,129,.15);border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:rgba(16,185,129,.3)}
-
 @keyframes slideInUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes pulse-glow{0%,100%{opacity:.3}50%{opacity:.7}}
 @keyframes typing-dot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-4px);opacity:1}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-
+@keyframes fadeOut{to{opacity:0;transform:translateY(-10px)}}
 .msg-enter{animation:slideInUp .4s cubic-bezier(.16,1,.3,1) forwards}
-.fade-in{animation:fadeIn .3s ease forwards}
 .sidebar-open{transform:translateX(0)!important}
 .typing-dot{animation:typing-dot 1.4s infinite}
 .typing-dot:nth-child(2){animation-delay:.2s}
 .typing-dot:nth-child(3){animation-delay:.4s}
-
 .melon-glow{background:radial-gradient(circle,rgba(224,74,115,.12) 0%,transparent 70%);animation:pulse-glow 4s ease-in-out infinite}
 .rind-glow{background:radial-gradient(circle,rgba(16,185,129,.08) 0%,transparent 60%);animation:pulse-glow 5s ease-in-out infinite 1s}
 .float{animation:float 6s ease-in-out infinite}
-
 textarea{field-sizing:content;min-height:24px;max-height:200px;resize:none}
-
 .code-block{background:#050d08;border:1px solid rgba(16,185,129,.1);border-radius:8px;overflow:hidden;margin:8px 0}
 .code-header{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;background:rgba(16,185,129,.04);border-bottom:1px solid rgba(16,185,129,.08);font-size:11px;color:#6ee7b7}
 .code-block pre{padding:12px 16px;overflow-x:auto;font-family:'JetBrains Mono','Fira Code',monospace;font-size:13px;line-height:1.6;color:#d4d4d4}
 .code-block code:not(pre code){background:rgba(224,74,115,.1);color:#f4a9ba;padding:2px 6px;border-radius:4px;font-size:13px;font-family:'JetBrains Mono','Fira Code',monospace}
-
 .msg-content p{margin-bottom:8px}.msg-content p:last-child{margin-bottom:0}
 .msg-content ul,.msg-content ol{padding-left:20px;margin:8px 0}.msg-content li{margin-bottom:4px}
 .msg-content h1,.msg-content h2,.msg-content h3{font-weight:600;margin:16px 0 8px}
@@ -53,46 +46,35 @@ textarea{field-sizing:content;min-height:24px;max-height:200px;resize:none}
 .msg-content strong{color:#fce7eb;font-weight:600}
 .msg-content a{color:#f4a9ba;text-decoration:underline}
 .msg-content blockquote{border-left:3px solid rgba(224,74,115,.4);padding-left:12px;margin:8px 0;color:#a3a3a3}
-
 .toast{animation:slideInUp .4s cubic-bezier(.16,1,.3,1) forwards}
 .toast-exit{animation:fadeOut .3s ease forwards}
-@keyframes fadeOut{to{opacity:0;transform:translateY(-10px)}}
-
 .conv-item:hover{background:rgba(16,185,129,.06)}
 .conv-item.active{background:rgba(224,74,115,.06);border-color:rgba(224,74,115,.15)}
 select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236ee7b7' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
-
 .seed-dot{width:4px;height:5px;background:#1a1a1a;border-radius:50%;display:inline-block;opacity:.6}
 </style>
 </head>
 <body>
-
 <div id="toast-container" class="fixed top-4 right-4 z-[100] flex flex-col gap-2"></div>
 
-<!-- Settings Modal -->
 <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display:none">
   <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeSettings()"></div>
   <div class="relative w-full max-w-lg bg-surface-200 border border-rind-700/20 rounded-2xl p-8 msg-enter">
     <div class="flex items-center justify-between mb-8">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-rind-500/10 flex items-center justify-center">
-          <span class="iconify text-rind-400" data-icon="lucide:settings" data-width="20"></span>
-        </div>
+        <div class="w-10 h-10 rounded-xl bg-rind-500/10 flex items-center justify-center"><span class="iconify text-rind-400" data-icon="lucide:settings" data-width="20"></span></div>
         <h3 class="text-lg font-semibold">Settings</h3>
       </div>
-      <button onclick="closeSettings()" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
-        <span class="iconify text-neutral-400" data-icon="lucide:x" data-width="16"></span>
-      </button>
+      <button onclick="closeSettings()" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"><span class="iconify text-neutral-400" data-icon="lucide:x" data-width="16"></span></button>
     </div>
     <div class="space-y-6">
       <div>
         <label class="block text-xs font-medium text-neutral-400 mb-2">Model</label>
         <select id="model-select" class="w-full bg-surface-50 border border-rind-700/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rind-500/40 transition-all duration-300 pr-10">
-          <option value="gemini-2.5-pro-preview-05-06">Gemini 2.5 Pro (Strongest)</option>
-          <option value="gemini-2.5-flash-preview-05-20" selected>Gemini 2.5 Flash (Fast + Smart)</option>
+          <option value="gemini-2.5-flash" selected>Gemini 2.5 Flash</option>
           <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-          <option value="gemini-1.5-pro-002">Gemini 1.5 Pro</option>
-          <option value="gemini-1.5-flash-002">Gemini 1.5 Flash</option>
+          <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+          <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
         </select>
       </div>
       <div>
@@ -100,9 +82,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
           <label class="text-xs font-medium text-neutral-400">Temperature</label>
           <span id="temp-value" class="text-xs text-melon-400 font-mono">0.70</span>
         </div>
-        <input id="temp-slider" type="range" min="0" max="2" step="0.05" value="0.7"
-          class="w-full h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-melon-500"
-          oninput="document.getElementById('temp-value').textContent=parseFloat(this.value).toFixed(2)">
+        <input id="temp-slider" type="range" min="0" max="2" step="0.05" value="0.7" class="w-full h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-melon-500" oninput="document.getElementById('temp-value').textContent=parseFloat(this.value).toFixed(2)">
         <div class="flex justify-between text-[10px] text-neutral-600 mt-1"><span>Precise</span><span>Creative</span></div>
       </div>
       <div>
@@ -110,15 +90,12 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
           <label class="text-xs font-medium text-neutral-400">Max Output Tokens</label>
           <span id="tokens-value" class="text-xs text-melon-400 font-mono">8192</span>
         </div>
-        <input id="tokens-slider" type="range" min="256" max="65536" step="256" value="8192"
-          class="w-full h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-melon-500"
-          oninput="document.getElementById('tokens-value').textContent=this.value">
+        <input id="tokens-slider" type="range" min="256" max="65536" step="256" value="8192" class="w-full h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-melon-500" oninput="document.getElementById('tokens-value').textContent=this.value">
       </div>
       <div>
         <label class="block text-xs font-medium text-neutral-400 mb-2">Extra System Instructions</label>
-        <textarea id="system-prompt" rows="3" placeholder="Additional instructions for the AI..."
-          class="w-full bg-surface-50 border border-rind-700/20 rounded-xl px-4 py-3 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-rind-500/40 focus:ring-1 focus:ring-rind-500/10 transition-all duration-300 resize-none"></textarea>
-        <p class="text-[10px] text-neutral-600 mt-1.5">The UMN Q-A knowledge base is always included automatically.</p>
+        <textarea id="system-prompt" rows="3" placeholder="Additional instructions..." class="w-full bg-surface-50 border border-rind-700/20 rounded-xl px-4 py-3 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-rind-500/40 focus:ring-1 focus:ring-rind-500/10 transition-all duration-300 resize-none"></textarea>
+        <p class="text-[10px] text-neutral-600 mt-1.5">UMN Q-A knowledge base is always included automatically.</p>
       </div>
       <div class="pt-4 border-t border-rind-700/10">
         <button onclick="clearAllData()" class="text-xs text-neutral-600 hover:text-melon-400 transition-colors">Clear all conversations</button>
@@ -127,20 +104,14 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   </div>
 </div>
 
-<!-- Layout -->
 <div class="flex h-screen">
-
   <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
-
-  <!-- Sidebar -->
   <aside id="sidebar" class="fixed lg:relative z-40 w-72 h-full bg-surface-100 border-r border-rind-700/10 flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-out">
     <div class="p-5 border-b border-rind-700/10">
       <div class="flex items-center gap-3">
         <div class="relative float">
           <div class="absolute inset-0 rounded-xl bg-melon-500/25 blur-lg"></div>
-          <div class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-melon-400 via-melon-500 to-melon-600 flex items-center justify-center shadow-lg shadow-melon-500/25">
-            <span class="iconify text-white" data-icon="lucide:cpu" data-width="20"></span>
-          </div>
+          <div class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-melon-400 via-melon-500 to-melon-600 flex items-center justify-center shadow-lg shadow-melon-500/25"><span class="iconify text-white" data-icon="lucide:cpu" data-width="20"></span></div>
         </div>
         <div>
           <h1 class="text-base font-semibold tracking-tight">UMN Core</h1>
@@ -159,10 +130,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
       <div id="conv-list" class="space-y-1"></div>
     </div>
     <div class="p-3 border-t border-rind-700/10 space-y-1">
-      <button onclick="openSettings()" class="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-neutral-500 hover:text-rind-300 hover:bg-rind-500/5 rounded-lg transition-all duration-200">
-        <span class="iconify" data-icon="lucide:settings" data-width="15"></span>
-        Settings
-      </button>
+      <button onclick="openSettings()" class="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-neutral-500 hover:text-rind-300 hover:bg-rind-500/5 rounded-lg transition-all duration-200"><span class="iconify" data-icon="lucide:settings" data-width="15"></span>Settings</button>
       <div class="flex items-center gap-2 px-3 py-2 text-[11px] text-neutral-700">
         <div class="w-1.5 h-1.5 rounded-full bg-rind-500 shadow-sm shadow-rind-500/50"></div>
         <span>Vercel · Gemini · Q-A Loaded</span>
@@ -170,42 +138,29 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     </div>
   </aside>
 
-  <!-- Main -->
   <main class="flex-1 flex flex-col min-w-0 relative">
-    <!-- Background glow -->
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] melon-glow pointer-events-none"></div>
     <div class="absolute bottom-0 left-1/4 w-[400px] h-[300px] rind-glow pointer-events-none"></div>
-
-    <!-- Top Bar -->
     <header class="relative flex items-center justify-between px-4 lg:px-6 h-14 border-b border-rind-700/10 bg-surface-50/60 backdrop-blur-md flex-shrink-0 z-10">
       <div class="flex items-center gap-3">
-        <button onclick="toggleSidebar()" class="lg:hidden w-8 h-8 rounded-lg bg-rind-500/10 flex items-center justify-center hover:bg-rind-500/15 transition-colors">
-          <span class="iconify text-rind-400" data-icon="lucide:menu" data-width="16"></span>
-        </button>
+        <button onclick="toggleSidebar()" class="lg:hidden w-8 h-8 rounded-lg bg-rind-500/10 flex items-center justify-center hover:bg-rind-500/15 transition-colors"><span class="iconify text-rind-400" data-icon="lucide:menu" data-width="16"></span></button>
         <select id="header-model-select" onchange="document.getElementById('model-select').value=this.value" class="bg-transparent text-sm font-medium text-rind-200 focus:outline-none cursor-pointer pr-5 border-none">
-          <option value="gemini-2.5-pro-preview-05-06" style="background:#0c1f17">Gemini 2.5 Pro</option>
-          <option value="gemini-2.5-flash-preview-05-20" style="background:#0c1f17" selected>Gemini 2.5 Flash</option>
+          <option value="gemini-2.5-flash" style="background:#0c1f17" selected>Gemini 2.5 Flash</option>
           <option value="gemini-2.0-flash" style="background:#0c1f17">Gemini 2.0 Flash</option>
-          <option value="gemini-1.5-pro-002" style="background:#0c1f17">Gemini 1.5 Pro</option>
-          <option value="gemini-1.5-flash-002" style="background:#0c1f17">Gemini 1.5 Flash</option>
+          <option value="gemini-1.5-pro" style="background:#0c1f17">Gemini 1.5 Pro</option>
+          <option value="gemini-1.5-flash" style="background:#0c1f17">Gemini 1.5 Flash</option>
         </select>
         <span id="speed-badge" class="hidden text-[10px] font-semibold text-rind-300 bg-rind-500/10 px-2 py-0.5 rounded-full border border-rind-500/15"></span>
       </div>
-      <button onclick="openSettings()" class="w-8 h-8 rounded-lg bg-rind-500/10 flex items-center justify-center hover:bg-rind-500/15 transition-colors">
-        <span class="iconify text-rind-400" data-icon="lucide:sliders-horizontal" data-width="15"></span>
-      </button>
+      <button onclick="openSettings()" class="w-8 h-8 rounded-lg bg-rind-500/10 flex items-center justify-center hover:bg-rind-500/15 transition-colors"><span class="iconify text-rind-400" data-icon="lucide:sliders-horizontal" data-width="15"></span></button>
     </header>
 
-    <!-- Messages -->
     <div id="messages" class="relative flex-1 overflow-y-auto">
       <div id="empty-state" class="h-full flex flex-col items-center justify-center px-6 relative z-10">
         <div class="relative mb-8">
-          <div class="w-24 h-24 rounded-3xl bg-surface-200 border border-rind-700/15 flex items-center justify-center float">
-            <div class="text-4xl">🍈</div>
-          </div>
+          <div class="w-24 h-24 rounded-3xl bg-surface-200 border border-rind-700/15 flex items-center justify-center float"><div class="text-4xl">🍈</div></div>
           <div class="absolute -inset-10 melon-glow rounded-full"></div>
           <div class="absolute -inset-16 rind-glow rounded-full"></div>
-          <!-- Seed dots -->
           <div class="absolute top-5 left-6 seed-dot rotate-12"></div>
           <div class="absolute top-8 left-10 seed-dot -rotate-6"></div>
           <div class="absolute top-6 right-7 seed-dot -rotate-15"></div>
@@ -213,56 +168,23 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
           <div class="absolute bottom-5 right-9 seed-dot -rotate-10"></div>
         </div>
         <h2 class="text-2xl font-semibold tracking-tight mb-2 bg-gradient-to-r from-melon-200 via-melon-300 to-rind-300 bg-clip-text text-transparent">UMN Core</h2>
-        <p class="text-sm text-neutral-500 text-center max-w-sm mb-10 leading-relaxed">
-          Melon-fresh AI with UMN Q-A knowledge built in. Ask anything about UMN.
-        </p>
+        <p class="text-sm text-neutral-500 text-center max-w-sm mb-10 leading-relaxed">Melon-fresh AI with UMN Q-A knowledge built in.</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg">
-          <button onclick="usePrompt('What is UMN and what can you tell me about it?')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="text-sm">🍉</span>
-              <span class="text-xs font-medium text-rind-400">About</span>
-            </div>
-            <p class="text-sm text-neutral-300">What is UMN?</p>
-          </button>
-          <button onclick="usePrompt('What resources and tools does UMN provide?')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="text-sm">🧃</span>
-              <span class="text-xs font-medium text-rind-400">Resources</span>
-            </div>
-            <p class="text-sm text-neutral-300">UMN tools & resources</p>
-          </button>
-          <button onclick="usePrompt('How do I get started with UMN? Walk me through the basics.')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="text-sm">🌱</span>
-              <span class="text-xs font-medium text-rind-400">Getting Started</span>
-            </div>
-            <p class="text-sm text-neutral-300">How to get started</p>
-          </button>
-          <button onclick="usePrompt('What are the most frequently asked questions about UMN?')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="text-sm">❓</span>
-              <span class="text-xs font-medium text-rind-400">FAQ</span>
-            </div>
-            <p class="text-sm text-neutral-300">Top questions answered</p>
-          </button>
+          <button onclick="usePrompt('What is UMN and what can you tell me about it?')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">🍉</span><span class="text-xs font-medium text-rind-400">About</span></div><p class="text-sm text-neutral-300">What is UMN?</p></button>
+          <button onclick="usePrompt('What resources and tools does UMN provide?')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">🧃</span><span class="text-xs font-medium text-rind-400">Resources</span></div><p class="text-sm text-neutral-300">UMN tools & resources</p></button>
+          <button onclick="usePrompt('How do I get started with UMN?')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">🌱</span><span class="text-xs font-medium text-rind-400">Getting Started</span></div><p class="text-sm text-neutral-300">How to get started</p></button>
+          <button onclick="usePrompt('What are the most frequently asked questions about UMN?')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">❓</span><span class="text-xs font-medium text-rind-400">FAQ</span></div><p class="text-sm text-neutral-300">Top questions answered</p></button>
         </div>
       </div>
     </div>
 
-    <!-- Input -->
     <div class="relative flex-shrink-0 border-t border-rind-700/10 bg-surface-50/80 backdrop-blur-md px-4 lg:px-6 py-4 z-10">
       <div class="max-w-3xl mx-auto">
         <div class="relative flex items-end bg-surface-200 border border-rind-700/15 rounded-2xl focus-within:border-melon-500/30 focus-within:ring-1 focus-within:ring-melon-500/10 transition-all duration-300">
-          <textarea id="msg-input" rows="1" placeholder="Ask UMN Core anything..."
-            class="flex-1 bg-transparent px-4 py-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none leading-relaxed"
-            onkeydown="handleKeyDown(event)"></textarea>
+          <textarea id="msg-input" rows="1" placeholder="Ask UMN Core anything..." class="flex-1 bg-transparent px-4 py-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none leading-relaxed" onkeydown="handleKeyDown(event)"></textarea>
           <div class="flex items-center gap-1 p-2">
-            <button id="stop-btn" onclick="stopGeneration()" class="hidden w-8 h-8 rounded-lg bg-melon-500/15 flex items-center justify-center hover:bg-melon-500/25 transition-colors" title="Stop">
-              <span class="iconify text-melon-300" data-icon="lucide:square" data-width="14"></span>
-            </button>
-            <button id="send-btn" onclick="sendMessage()" class="w-8 h-8 rounded-lg bg-gradient-to-br from-melon-400 to-melon-600 flex items-center justify-center hover:from-melon-300 hover:to-melon-500 transition-all duration-200 shadow-lg shadow-melon-500/20 disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed" disabled>
-              <span class="iconify text-white" data-icon="lucide:arrow-up" data-width="16"></span>
-            </button>
+            <button id="stop-btn" onclick="stopGeneration()" class="hidden w-8 h-8 rounded-lg bg-melon-500/15 flex items-center justify-center hover:bg-melon-500/25 transition-colors"><span class="iconify text-melon-300" data-icon="lucide:square" data-width="14"></span></button>
+            <button id="send-btn" onclick="sendMessage()" class="w-8 h-8 rounded-lg bg-gradient-to-br from-melon-400 to-melon-600 flex items-center justify-center hover:from-melon-300 hover:to-melon-500 transition-all duration-200 shadow-lg shadow-melon-500/20 disabled:opacity-30 disabled:shadow-none disabled:cursor-not-allowed" disabled><span class="iconify text-white" data-icon="lucide:arrow-up" data-width="16"></span></button>
           </div>
         </div>
         <p class="text-center text-[11px] text-neutral-700 mt-2.5">🍉 UMN Core · Knowledge from <a href="https://umnsites.github.io/Q-A/" target="_blank" class="text-rind-500 hover:text-rind-300 underline">Q-A</a> · Verify important info</p>
@@ -277,14 +199,12 @@ let currentConvId=null,isGenerating=false,abortController=null;
 
 document.addEventListener('DOMContentLoaded',()=>{
   renderConversations();
-  const input=document.getElementById('msg-input');
-  input.addEventListener('input',()=>{document.getElementById('send-btn').disabled=!input.value.trim()});
+  document.getElementById('msg-input').addEventListener('input',function(){document.getElementById('send-btn').disabled=!this.value.trim()});
 });
 
 function openSettings(){document.getElementById('settings-modal').style.display='flex';document.getElementById('system-prompt').value=localStorage.getItem('umn_system_prompt')||''}
 function closeSettings(){localStorage.setItem('umn_system_prompt',document.getElementById('system-prompt').value);document.getElementById('settings-modal').style.display='none'}
 function clearAllData(){if(!confirm('Delete all conversations?'))return;localStorage.removeItem('umn_conversations');localStorage.removeItem('umn_system_prompt');conversations=[];currentConvId=null;renderConversations();showEmptyState();showToast('Cleared','success');closeSettings()}
-
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('sidebar-open');document.getElementById('sidebar-overlay').classList.toggle('hidden')}
 
 function newChat(){currentConvId=null;showEmptyState();renderConversations();if(window.innerWidth<1024)toggleSidebar()}
@@ -294,125 +214,74 @@ function deleteConversation(id,e){e.stopPropagation();conversations=conversation
 function renderConversations(){
   const list=document.getElementById('conv-list');
   if(!conversations.length){list.innerHTML='<p class="px-3 py-6 text-center text-xs text-neutral-700">No conversations yet</p>';return}
-  list.innerHTML=conversations.slice().reverse().map(c=>`
-    <div class="conv-item ${c.id===currentConvId?'active':''} flex items-center gap-2 px-3 py-2.5 rounded-xl border border-transparent cursor-pointer transition-all duration-200 group" onclick="loadConversation('${c.id}')">
-      <span class="iconify text-rind-700 flex-shrink-0" data-icon="lucide:message-square" data-width="14"></span>
-      <div class="flex-1 min-w-0">
-        <p class="text-sm text-neutral-300 truncate">${escapeHtml(c.title||'New Chat')}</p>
-        <p class="text-[10px] text-neutral-700">${getRelativeTime(c.updatedAt||c.createdAt)}</p>
-      </div>
-      <button onclick="deleteConversation('${c.id}',event)" class="opacity-0 group-hover:opacity-100 w-6 h-6 rounded flex items-center justify-center hover:bg-white/10 transition-all">
-        <span class="iconify text-neutral-700 hover:text-melon-400" data-icon="lucide:trash-2" data-width="12"></span>
-      </button>
-    </div>`).join('');
+  list.innerHTML=conversations.slice().reverse().map(c=>'<div class="conv-item '+(c.id===currentConvId?'active':'')+' flex items-center gap-2 px-3 py-2.5 rounded-xl border border-transparent cursor-pointer transition-all duration-200 group" onclick="loadConversation(\''+c.id+'\')"><span class="iconify text-rind-700 flex-shrink-0" data-icon="lucide:message-square" data-width="14"></span><div class="flex-1 min-w-0"><p class="text-sm text-neutral-300 truncate">'+escapeHtml(c.title||'New Chat')+'</p><p class="text-[10px] text-neutral-700">'+getRelativeTime(c.updatedAt||c.createdAt)+'</p></div><button onclick="deleteConversation(\''+c.id+'\',event)" class="opacity-0 group-hover:opacity-100 w-6 h-6 rounded flex items-center justify-center hover:bg-white/10 transition-all"><span class="iconify text-neutral-700 hover:text-melon-400" data-icon="lucide:trash-2" data-width="12"></span></button></div>').join('');
 }
 
 function showEmptyState(){
-  document.getElementById('messages').innerHTML=`
-  <div id="empty-state" class="h-full flex flex-col items-center justify-center px-6 relative z-10">
-    <div class="relative mb-8">
-      <div class="w-24 h-24 rounded-3xl bg-surface-200 border border-rind-700/15 flex items-center justify-center float">
-        <div class="text-4xl">🍈</div>
-      </div>
-      <div class="absolute -inset-10 melon-glow rounded-full"></div>
-      <div class="absolute -inset-16 rind-glow rounded-full"></div>
-      <div class="absolute top-5 left-6 seed-dot rotate-12"></div>
-      <div class="absolute top-8 left-10 seed-dot -rotate-6"></div>
-      <div class="absolute top-6 right-7 seed-dot -rotate-15"></div>
-      <div class="absolute bottom-7 left-8 seed-dot rotate-8"></div>
-      <div class="absolute bottom-5 right-9 seed-dot -rotate-10"></div>
-    </div>
-    <h2 class="text-2xl font-semibold tracking-tight mb-2 bg-gradient-to-r from-melon-200 via-melon-300 to-rind-300 bg-clip-text text-transparent">UMN Core</h2>
-    <p class="text-sm text-neutral-500 text-center max-w-sm mb-10 leading-relaxed">Melon-fresh AI with UMN Q-A knowledge built in. Ask anything about UMN.</p>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg">
-      <button onclick="usePrompt('What is UMN and what can you tell me about it?')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">🍉</span><span class="text-xs font-medium text-rind-400">About</span></div><p class="text-sm text-neutral-300">What is UMN?</p></button>
-      <button onclick="usePrompt('What resources and tools does UMN provide?')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">🧃</span><span class="text-xs font-medium text-rind-400">Resources</span></div><p class="text-sm text-neutral-300">UMN tools & resources</p></button>
-      <button onclick="usePrompt('How do I get started with UMN? Walk me through the basics.')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">🌱</span><span class="text-xs font-medium text-rind-400">Getting Started</span></div><p class="text-sm text-neutral-300">How to get started</p></button>
-      <button onclick="usePrompt('What are the most frequently asked questions about UMN?')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">❓</span><span class="text-xs font-medium text-rind-400">FAQ</span></div><p class="text-sm text-neutral-300">Top questions answered</p></button>
-    </div>
-  </div>`;
+  document.getElementById('messages').innerHTML='<div id="empty-state" class="h-full flex flex-col items-center justify-center px-6 relative z-10"><div class="relative mb-8"><div class="w-24 h-24 rounded-3xl bg-surface-200 border border-rind-700/15 flex items-center justify-center float"><div class="text-4xl">🍈</div></div><div class="absolute -inset-10 melon-glow rounded-full"></div><div class="absolute -inset-16 rind-glow rounded-full"></div><div class="absolute top-5 left-6 seed-dot rotate-12"></div><div class="absolute top-8 left-10 seed-dot -rotate-6"></div><div class="absolute top-6 right-7 seed-dot -rotate-15"></div><div class="absolute bottom-7 left-8 seed-dot rotate-8"></div><div class="absolute bottom-5 right-9 seed-dot -rotate-10"></div></div><h2 class="text-2xl font-semibold tracking-tight mb-2 bg-gradient-to-r from-melon-200 via-melon-300 to-rind-300 bg-clip-text text-transparent">UMN Core</h2><p class="text-sm text-neutral-500 text-center max-w-sm mb-10 leading-relaxed">Melon-fresh AI with UMN Q-A knowledge built in.</p><div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg"><button onclick="usePrompt(\'What is UMN and what can you tell me about it?\')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">🍉</span><span class="text-xs font-medium text-rind-400">About</span></div><p class="text-sm text-neutral-300">What is UMN?</p></button><button onclick="usePrompt(\'What resources and tools does UMN provide?\')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">🧃</span><span class="text-xs font-medium text-rind-400">Resources</span></div><p class="text-sm text-neutral-300">UMN tools & resources</p></button><button onclick="usePrompt(\'How do I get started with UMN?\')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">🌱</span><span class="text-xs font-medium text-rind-400">Getting Started</span></div><p class="text-sm text-neutral-300">How to get started</p></button><button onclick="usePrompt(\'What are the most frequently asked questions about UMN?\')" class="group text-left p-4 bg-surface-200/80 border border-rind-700/10 rounded-xl hover:border-rind-500/20 hover:bg-surface-300 transition-all duration-300 backdrop-blur-sm"><div class="flex items-center gap-2 mb-2"><span class="text-sm">❓</span><span class="text-xs font-medium text-rind-400">FAQ</span></div><p class="text-sm text-neutral-300">Top questions answered</p></button></div></div>';
 }
 
-function appendMessage(role,content,animate=true){
-  const es=document.getElementById('empty-state');if(es)es.remove();
-  const msgs=document.getElementById('messages'),div=document.createElement('div');
-  div.className=`max-w-3xl mx-auto px-4 lg:px-6 ${animate?'msg-enter':''}`;
-  const isUser=role==='user';
-  div.innerHTML=`
-    <div class="py-6 ${!isUser?'border-b border-rind-700/8':''}">
-      <div class="flex gap-4">
-        <div class="flex-shrink-0 w-7 h-7 rounded-lg ${isUser?'bg-melon-500/12':'bg-rind-500/12'} flex items-center justify-center mt-0.5">
-          ${isUser?'<span class="iconify text-melon-300" data-icon="lucide:user" data-width="14"></span>':'<span class="iconify text-rind-300" data-icon="lucide:cpu" data-width="14"></span>'}
-        </div>
-        <div class="flex-1 min-w-0 msg-content text-neutral-300 text-sm leading-relaxed">
-          ${isUser?`<p class="whitespace-pre-wrap">${escapeHtml(content)}</p>`:renderMarkdown(content)}
-        </div>
-      </div>
-    </div>`;
+function appendMessage(role,content,animate){
+  var es=document.getElementById('empty-state');if(es)es.remove();
+  var msgs=document.getElementById('messages'),div=document.createElement('div');
+  div.className='max-w-3xl mx-auto px-4 lg:px-6 '+(animate?'msg-enter':'');
+  var isUser=role==='user';
+  div.innerHTML='<div class="py-6 '+(!isUser?'border-b border-rind-700/8':'')+'"><div class="flex gap-4"><div class="flex-shrink-0 w-7 h-7 rounded-lg '+(isUser?'bg-melon-500/12':'bg-rind-500/12')+' flex items-center justify-center mt-0.5">'+(isUser?'<span class="iconify text-melon-300" data-icon="lucide:user" data-width="14"></span>':'<span class="iconify text-rind-300" data-icon="lucide:cpu" data-width="14"></span>')+'</div><div class="flex-1 min-w-0 msg-content text-neutral-300 text-sm leading-relaxed">'+(isUser?'<p class="whitespace-pre-wrap">'+escapeHtml(content)+'</p>':renderMarkdown(content))+'</div></div></div>';
   msgs.appendChild(div);scrollToBottom();return div;
 }
 
 function appendTypingIndicator(){
-  const es=document.getElementById('empty-state');if(es)es.remove();
-  const msgs=document.getElementById('messages'),div=document.createElement('div');
+  var es=document.getElementById('empty-state');if(es)es.remove();
+  var msgs=document.getElementById('messages'),div=document.createElement('div');
   div.id='typing-indicator';div.className='max-w-3xl mx-auto px-4 lg:px-6 msg-enter';
-  div.innerHTML=`<div class="py-6"><div class="flex gap-4"><div class="flex-shrink-0 w-7 h-7 rounded-lg bg-rind-500/12 flex items-center justify-center mt-0.5"><span class="iconify text-rind-300" data-icon="lucide:cpu" data-width="14"></span></div><div class="flex items-center gap-1.5 py-2"><div class="w-1.5 h-1.5 rounded-full bg-rind-500 typing-dot"></div><div class="w-1.5 h-1.5 rounded-full bg-rind-500 typing-dot"></div><div class="w-1.5 h-1.5 rounded-full bg-rind-500 typing-dot"></div></div></div></div>`;
+  div.innerHTML='<div class="py-6"><div class="flex gap-4"><div class="flex-shrink-0 w-7 h-7 rounded-lg bg-rind-500/12 flex items-center justify-center mt-0.5"><span class="iconify text-rind-300" data-icon="lucide:cpu" data-width="14"></span></div><div class="flex items-center gap-1.5 py-2"><div class="w-1.5 h-1.5 rounded-full bg-rind-500 typing-dot"></div><div class="w-1.5 h-1.5 rounded-full bg-rind-500 typing-dot"></div><div class="w-1.5 h-1.5 rounded-full bg-rind-500 typing-dot"></div></div></div></div>';
   msgs.appendChild(div);scrollToBottom();
 }
-function removeTypingIndicator(){const el=document.getElementById('typing-indicator');if(el)el.remove()}
+function removeTypingIndicator(){var el=document.getElementById('typing-indicator');if(el)el.remove()}
 
 function usePrompt(t){document.getElementById('msg-input').value=t;document.getElementById('send-btn').disabled=false;sendMessage()}
 function handleKeyDown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();if(!isGenerating&&document.getElementById('msg-input').value.trim())sendMessage()}}
 
 async function sendMessage(){
-  const input=document.getElementById('msg-input'),text=input.value.trim();
+  var input=document.getElementById('msg-input'),text=input.value.trim();
   if(!text||isGenerating)return;
-  if(!currentConvId){const c={id:'conv_'+Date.now(),title:text.slice(0,60),messages:[],createdAt:Date.now(),updatedAt:Date.now()};conversations.push(c);currentConvId=c.id}
-  const conv=conversations.find(c=>c.id===currentConvId);
+  if(!currentConvId){var c={id:'conv_'+Date.now(),title:text.slice(0,60),messages:[],createdAt:Date.now(),updatedAt:Date.now()};conversations.push(c);currentConvId=c.id}
+  var conv=conversations.find(function(x){return x.id===currentConvId});
   conv.messages.push({role:'user',content:text});conv.updatedAt=Date.now();
   appendMessage('user',text);input.value='';document.getElementById('send-btn').disabled=true;
-
-  const sp=localStorage.getItem('umn_system_prompt')||'';
-  const apiMessages=[];if(sp)apiMessages.push({role:'system',content:sp});
-  conv.messages.forEach(m=>apiMessages.push({role:m.role,content:m.content}));
-
+  var sp=localStorage.getItem('umn_system_prompt')||'';
+  var apiMessages=[];if(sp)apiMessages.push({role:'system',content:sp});
+  conv.messages.forEach(function(m){apiMessages.push({role:m.role,content:m.content})});
   isGenerating=true;
   document.getElementById('send-btn').classList.add('hidden');
   document.getElementById('stop-btn').classList.remove('hidden');
   appendTypingIndicator();
-
   abortController=new AbortController();
-  const model=document.getElementById('model-select').value;
-  const temp=parseFloat(document.getElementById('temp-slider').value);
-  const maxTokens=parseInt(document.getElementById('tokens-slider').value);
-  const startTime=performance.now();
-
+  var model=document.getElementById('model-select').value;
+  var temp=parseFloat(document.getElementById('temp-slider').value);
+  var maxTokens=parseInt(document.getElementById('tokens-slider').value);
+  var startTime=performance.now();
   try{
-    const response=await fetch('/api/chat',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({messages:apiMessages,model,temperature:temp,max_tokens:maxTokens}),
-      signal:abortController.signal
-    });
-    if(!response.ok){const e=await response.json().catch(()=>({}));throw new Error(e.error||`Server error ${response.status}`)}
-
+    var response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:apiMessages,model:model,temperature:temp,max_tokens:maxTokens}),signal:abortController.signal});
+    if(!response.ok){var e=await response.json().catch(function(){return{}});throw new Error(e.error||'Server error '+response.status)}
     removeTypingIndicator();
-    const msgDiv=appendMessage('assistant','');
-    const contentEl=msgDiv.querySelector('.msg-content');
-    let fullContent='';
-    const reader=response.body.getReader(),decoder=new TextDecoder();
-    let buffer='';
+    var msgDiv=appendMessage('assistant','');
+    var contentEl=msgDiv.querySelector('.msg-content');
+    var fullContent='';
+    var reader=response.body.getReader(),decoder=new TextDecoder();
+    var buffer='';
     while(true){
-      const{done,value}=await reader.read();if(done)break;
-      buffer+=decoder.decode(value,{stream:true});
-      const lines=buffer.split('\n');buffer=lines.pop()||'';
-      for(const line of lines){
-        const t=line.trim();if(!t.startsWith('data: '))continue;
-        const d=t.slice(6);if(d==='[DONE]')continue;
-        try{const j=JSON.parse(d);if(j.error)throw new Error(j.error);const delta=j.choices?.[0]?.delta?.content;if(delta){fullContent+=delta;contentEl.innerHTML=renderMarkdown(fullContent);scrollToBottom()}}catch(e){if(e.message&&!String(e).includes('JSON'))throw e}
+      var r=await reader.read();if(r.done)break;
+      buffer+=decoder.decode(r.value,{stream:true});
+      var lines=buffer.split('\n');buffer=lines.pop()||'';
+      for(var i=0;i<lines.length;i++){
+        var t=lines[i].trim();if(!t.startsWith('data: '))continue;
+        var d=t.slice(6);if(d==='[DONE]')continue;
+        try{var j=JSON.parse(d);if(j.error)throw new Error(j.error);var delta=j.choices&&j.choices[0]&&j.choices[0].delta&&j.choices[0].delta.content;if(delta){fullContent+=delta;contentEl.innerHTML=renderMarkdown(fullContent);scrollToBottom()}}catch(e){if(e.message&&!String(e).includes('JSON'))throw e}
       }
     }
-    const elapsed=performance.now()-startTime,speed=Math.round((fullContent.length/4)/(elapsed/1000));
-    if(speed>10){const b=document.getElementById('speed-badge');b.textContent=speed+' t/s';b.classList.remove('hidden');setTimeout(()=>b.classList.add('hidden'),5000)}
+    var elapsed=performance.now()-startTime,speed=Math.round((fullContent.length/4)/(elapsed/1000));
+    if(speed>10){var b=document.getElementById('speed-badge');b.textContent=speed+' t/s';b.classList.remove('hidden');setTimeout(function(){b.classList.add('hidden')},5000)}
     conv.messages.push({role:'assistant',content:fullContent});conv.updatedAt=Date.now();
     localStorage.setItem('umn_conversations',JSON.stringify(conversations));renderConversations();
   }catch(err){
@@ -429,8 +298,8 @@ async function sendMessage(){
 function stopGeneration(){if(abortController)abortController.abort()}
 
 function renderMarkdown(t){
-  let h=t;
-  h=h.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,l,c)=>`<div class="code-block"><div class="code-header"><span>${l||'text'}</span><button onclick="copyCode(this)" class="hover:text-white transition-colors flex items-center gap-1"><span class="iconify" data-icon="lucide:copy" data-width="11"></span> Copy</button></div><pre><code>${escapeHtml(c.trim())}</code></pre></div>`);
+  var h=t;
+  h=h.replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){return'<div class="code-block"><div class="code-header"><span>'+(l||'text')+'</span><button onclick="copyCode(this)" class="hover:text-white transition-colors flex items-center gap-1"><span class="iconify" data-icon="lucide:copy" data-width="11"></span> Copy</button></div><pre><code>'+escapeHtml(c.trim())+'</code></pre></div>'});
   h=h.replace(/`([^`]+)`/g,'<code>$1</code>');
   h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
   h=h.replace(/\*(.+?)\*/g,'<em>$1</em>');
@@ -442,23 +311,24 @@ function renderMarkdown(t){
   h=h.replace(/(<li>.*<\/li>\n?)+/g,'<ul>$&</ul>');
   h=h.replace(/^\d+\. (.+)$/gm,'<li>$1</li>');
   h=h.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
-  h=h.split('\n\n').map(b=>{b=b.trim();if(!b)return'';if(b.startsWith('<h')||b.startsWith('<ul')||b.startsWith('<ol')||b.startsWith('<blockquote')||b.startsWith('<div'))return b;return`<p>${b.replace(/\n/g,'<br>')}</p>`}).join('\n');
+  h=h.split('\n\n').map(function(b){b=b.trim();if(!b)return'';if(b.startsWith('<h')||b.startsWith('<ul')||b.startsWith('<ol')||b.startsWith('<blockquote')||b.startsWith('<div'))return b;return'<p>'+b.replace(/\n/g,'<br>')+'</p>'}).join('\n');
   return h;
 }
-function copyCode(b){const c=b.closest('.code-block').querySelector('code').textContent;navigator.clipboard.writeText(c).then(()=>{b.innerHTML='<span class="iconify" data-icon="lucide:check" data-width="11"></span> Copied';setTimeout(()=>{b.innerHTML='<span class="iconify" data-icon="lucide:copy" data-width="11"></span> Copy'},2000)})}
+function copyCode(b){var c=b.closest('.code-block').querySelector('code').textContent;navigator.clipboard.writeText(c).then(function(){b.innerHTML='<span class="iconify" data-icon="lucide:check" data-width="11"></span> Copied';setTimeout(function(){b.innerHTML='<span class="iconify" data-icon="lucide:copy" data-width="11"></span> Copy'},2000)})}
 
-function escapeHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
-function scrollToBottom(){const m=document.getElementById('messages');requestAnimationFrame(()=>{m.scrollTop=m.scrollHeight})}
-function getRelativeTime(ts){const d=Date.now()-ts,m=Math.floor(d/60000);if(m<1)return'Just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';const days=Math.floor(h/24);if(days<7)return days+'d ago';return new Date(ts).toLocaleDateString()}
+function escapeHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function scrollToBottom(){var m=document.getElementById('messages');requestAnimationFrame(function(){m.scrollTop=m.scrollHeight})}
+function getRelativeTime(ts){var d=Date.now()-ts,m=Math.floor(d/60000);if(m<1)return'Just now';if(m<60)return m+'m ago';var h=Math.floor(m/60);if(h<24)return h+'h ago';var days=Math.floor(h/24);if(days<7)return days+'d ago';return new Date(ts).toLocaleDateString()}
 
-function showToast(message,type='info'){
-  const c=document.getElementById('toast-container'),t=document.createElement('div');
-  const colors={success:'border-rind-500/30 bg-rind-500/10',error:'border-melon-500/30 bg-melon-500/10',info:'border-rind-500/20 bg-rind-500/5'};
-  const icons={success:'lucide:check-circle',error:'lucide:alert-circle',info:'lucide:info'};
-  const ic={success:'text-rind-300',error:'text-melon-300',info:'text-rind-400'};
-  t.className=`toast flex items-center gap-2.5 px-4 py-3 rounded-xl border ${colors[type]} backdrop-blur-md min-w-[280px]`;
-  t.innerHTML=`<span class="iconify ${ic[type]}" data-icon="${icons[type]}" data-width="16"></span><span class="text-sm text-neutral-200 flex-1">${escapeHtml(message)}</span>`;
-  c.appendChild(t);setTimeout(()=>{t.classList.add('toast-exit');setTimeout(()=>t.remove(),300)},3500);
+function showToast(message,type){
+  type=type||'info';
+  var c=document.getElementById('toast-container'),t=document.createElement('div');
+  var colors={success:'border-rind-500/30 bg-rind-500/10',error:'border-melon-500/30 bg-melon-500/10',info:'border-rind-500/20 bg-rind-500/5'};
+  var icons={success:'lucide:check-circle',error:'lucide:alert-circle',info:'lucide:info'};
+  var ic={success:'text-rind-300',error:'text-melon-300',info:'text-rind-400'};
+  t.className='toast flex items-center gap-2.5 px-4 py-3 rounded-xl border '+colors[type]+' backdrop-blur-md min-w-[280px]';
+  t.innerHTML='<span class="iconify '+ic[type]+'" data-icon="'+icons[type]+'" data-width="16"></span><span class="text-sm text-neutral-200 flex-1">'+escapeHtml(message)+'</span>';
+  c.appendChild(t);setTimeout(function(){t.classList.add('toast-exit');setTimeout(function(){t.remove()},300)},3500);
 }
 
 document.getElementById('model-select').addEventListener('change',function(){document.getElementById('header-model-select').value=this.value});
